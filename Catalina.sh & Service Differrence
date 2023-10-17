@@ -1,0 +1,17 @@
+Catalina.sh  & service tomcat start/stop
+link : https://stackoverflow.com/questions/29984238/whats-the-difference-between-service-tomcat-start-stop-and-catalina-sh-run-sto
+
+
+catalina.sh run starts tomcat in the foreground, displaying the logs on the console that you started it. Hitting Ctrl-C will terminate tomcat.
+
+startup.sh will start tomcat in the background. You'll have to tail -f logs/catalina.out to see the logs.
+
+Both will do the same things, apart from the foreground/background distinction.
+
+Actually, startup.sh is quite small. If you inspect the file, you'll see that it in turn calls catalina.sh start. And in catalina.sh you can just 
+search for occurrences of run and start in order to see the difference in how they're handled.
+
+service tomcat start is typically starting a daemon in the background on Linux (or *nix), through yet another (non-tomcat) OS-script e.g. in /etc/init.d.
+It typically also takes care of running tomcat as a specific user (often called "tomcat" or similar). 
+If you're using your Linux-distribution's tomcat, you should only start with this script.
+Otherwise you're risking that temporary files or log files can't be overwritten, because they belong to a different user that you used to start tomcat with earlier.
